@@ -20,7 +20,7 @@ def login_required(func):
 def login_not_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if 'user' in session or session['user'] != "":
+        if 'user' in session:
             return redirect(url_for('authentication.admin_home'))
         return func(*args, **kwargs)
     return wrapper
