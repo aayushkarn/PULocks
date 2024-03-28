@@ -1,0 +1,241 @@
+{%extends 'base.html'%}
+{%block content%}
+
+{% with messages = get_flashed_messages() %}
+	{% if messages %}
+		{% for msg in messages %}
+			<script type="text/javascript">
+				Swal.fire({
+					title: "{{msg}}",
+					width: 600,
+					padding: "3em",
+					color: "#fff",
+					background: `
+						rgba(0,0,0,0.5) url("{{url_for('static',filename='img/abhijeet.jpg')}}") no-repeat center center / contain
+					`,
+					
+					backdrop: `
+					  rgba(0,0,123,0.4)
+					  url("{{url_for('static',filename='img/nyan-cat.gif')}}")
+					  left top
+					  no-repeat
+					`
+				  });
+			</script>
+		{% endfor %}
+	{% endif %}
+{% endwith %}
+
+<section class="section">
+    <div class="container">
+        <div class="columns">
+            <div class="column is-one-quarter">
+                <aside class="menu">
+                    <p class="menu-label">
+                        Options
+                    </p>
+                    <ul class="menu-list">
+                        <li><a href="#" onclick="showSection('addTalabandi')">Add Talabandi</a></li>
+                        <li><a href="#" onclick="showSection('listTalabandi')">List Talabandi</a></li>
+                        <li><a href="#" onclick="showSection('addUser')">Add User</a></li>
+                    </ul>
+                </aside>
+            </div>
+            <div class="column">
+                <h1 class="title">Welcome, {{username}}</h1>
+                <!-- Content areas for different options -->
+                <!-- For example, the content area for adding Talabandi -->
+                <div class="box" id="addTalabandi" style="display: none;">
+                    <h2 class="subtitle">Add Talabandi&nbsp;<span class="tag is-danger is-small">BUGS</span></h2>
+					<div class="column is-vcentered">
+						<form action="{{url_for('authentication.add_talabandi')}}" method="POST" id="talabandiForm">
+							<div class="field">
+								<label class="label">Talabandi Date</label>
+								<div class="control">
+									<input class="input" type="date" name="talabandi_date" required>
+								</div>
+							</div>
+							<div class="field">
+								<label class="label">Description</label>
+								<div class="control">
+									<textarea class="textarea" name="description" placeholder="Enter Description"></textarea>
+								</div>
+							</div>
+							<div class="field">
+								<label class="label">Status</label>
+								<div class="control">
+									<div class="select">
+										<select name="status" id="statusSelect">
+											<option value="ONGOING">Ongoing</option>
+											<option value="COMPLETED">Completed</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="field">
+								<label class="label">End Date</label>
+								<div class="control">
+									<input class="input" type="date" name="end_date" id="endDateInput" required>
+								</div>
+							</div>
+							<div class="field is-grouped">
+								<div class="control">
+									<button class="button is-primary" type="submit">Add Talabandi</button>
+								</div>
+								<div class="control">
+									<button class="button is-light" type="reset">Reset</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+					<script>
+						// Get status select and end date input elements
+						const statusSelect = document.getElementById('statusSelect');
+						const endDateInput = document.getElementById('endDateInput');
+						
+						endDateInput.disabled = true;
+						// Add event listener to status select
+						statusSelect.addEventListener('change', function() {
+							// Check if status is ongoing
+							if (this.value === 'ONGOING') {
+								// If ongoing, disable end date input
+								endDateInput.disabled = true;
+								// Clear end date value
+								endDateInput.value = '';
+							} else {
+								// If completed, enable end date input
+								endDateInput.disabled = false;
+							}
+						});
+					</script>
+                <!-- Content area for listing Talabandi -->
+                <div class="box" id="listTalabandi" style="display: none;">
+                    <h2 class="subtitle">List Talabandi</h2>
+                    <!-- Table to display list of Talabandi with edit and delete actions -->
+                    <!-- Example table code -->
+					<div class="table-container">
+						{% if talabandi_list %}
+						<table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+							<thead>
+								<tr>
+									<th>Date</th>
+									<th>Description</th>
+									<th>Tithi</th>
+									<th>Status</th>
+									<th colspan=2>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								<!-- Table rows with Talabandi data -->
+								<!-- Each row should have edit and delete actions -->
+							{% for talabandi in talabandi_list %}
+							<tr>
+								<th>{{talabandi.date}}{%if talabandi.status.value == "COMPLETED"%}&nbsp;to&nbsp;{{talabandi.end_date}} {%endif%}</th>
+								<th>{% if talabandi.description == ""%}-{%else%}{{talabandi.description}}{%endif%}</th>
+								<th>{{talabandi.tithi}}</th>
+								<th><span class="tag is-success">{{talabandi.status.value}}</span></th>
+								<th>
+									{%if talabandi.status.value == "ONGOING"%}
+										<a href="{{url_for('authentication.edit_talabandi', id=talabandi.id)}}">Edit</a></th>
+									{%else%}
+										<span class="has-text-grey-light has-text-weight-light">Edit</span>
+									{%endif%}
+								<th><a href="#" class="delete-btn" data-id="{{talabandi.id}}">Delete</a></th>
+							</tr>
+							{% endfor %}
+							</tbody>
+						</table>
+						{% else %}
+							<p class="is-fullwidth">Looks like no data has been added yet</p>
+						{% endif %}
+					</div>
+                </div>
+                <!-- Content area for addUser -->
+                <div class="box" id="addUser" style="display: none;">
+                    <h2 class="subtitle">Add new User</h2>
+                    <!-- Form fields to create new user -->
+                    <!-- Example form code -->
+                    <form action="#" method="POST">
+                        <!-- Form fields for creating new user -->
+						<div class="field">
+							<label class="label">Name</label>
+							<div class="control">
+								<input class="input" type="text" name="name" placeholder="Enter your name" required>
+							</div>
+						</div>
+						<div class="field">
+							<label class="label">Email</label>
+							<div class="control">
+								<input class="input" type="email" name="email" placeholder="Enter your email" required>
+							</div>
+						</div>
+						<div class="field">
+							<label class="label">Password</label>
+							<div class="control">
+								<input class="input" type="password" name="password" placeholder="Enter your password" required>
+							</div>
+						</div>
+						<div class="field is-grouped">
+							<div class="control">
+								<button class="button is-primary" type="submit">Submit</button>
+							</div>
+							<div class="control">
+								<button class="button is-light" type="reset">Clear</button>
+							</div>
+						</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function showSection(sectionId) {
+        // Hide all sections
+        document.querySelectorAll('.box').forEach(function(section) {
+            section.style.display = 'none';
+        });
+        // Show the selected section
+        document.getElementById(sectionId).style.display = 'block';
+    }
+	
+	document.querySelectorAll('.delete-btn').forEach(function(button) {
+		button.addEventListener('click', function(e) {
+			const id = e.target.getAttribute('data-id');
+			Swal.fire({
+				title: 'Are you sure?',
+				text: "You won't be able to revert this!",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Yes, delete it!'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					// Send AJAX request to delete TalaBandi
+					fetch('{{url_for('authentication.delete_talabandi')}}', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({ id: id }),
+					})
+					.then(response => response.json())
+					.then(data => {
+						if (data.success) {
+							Swal.fire('Success!', data.message, 'success');
+							location.reload()
+						} else {
+							Swal.fire('Error!', data.message, 'error');
+						}
+					});
+				}
+			});
+		});
+	});
+	
+</script>
+
+{%endblock%}

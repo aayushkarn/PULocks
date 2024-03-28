@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+    <section class="section content">
+        <div class="container">
+          <div class="columns is-vcentered">
+            <div class="column is-half">
+              <div class="is-flex is-align-items-center">
+                {%if isTalabandi%}
+                  <p class="is-size-1" id="left"><span class="has-text-weight-light	">PUSET is&nbsp;</span><span class="status has-text-weight-bold has-text-danger-dark">LOCKED🔒</span></p>
+                {%else%}
+                  <p class="is-size-1" id="left"><span class="has-text-weight-light	">PUSET is&nbsp;</span><span class="status has-text-weight-bold has-text-primary-dark">NOT LOCKED🔓</span></p>
+                {%endif%}
+              </div>
+              <i class="is-size-6 has-text-weight-light">Tithi: {{tithi}}</i>
+              <!--<i class="is-size-6 has-text-weight-light">Last Updated: 2024-03-27</i>-->
+            </div>
+            <div class="column is-half">
+              <figure class="image is-4by3">
+                {%if isTalabandi%}
+                  <img src="static/img/daya.png" id="right" alt="daya" class="image">
+                {%else%}
+                  <img src="static/img/miracle.gif" id="right" alt="Miracle" class="image">
+                {%endif%}
+              </figure>
+            </div>
+          </div>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,78 @@
+{%extends 'base.html'%}
+{%block content%}
+<div class="section">
+    <div class="column">
+        <a href="{{ url_for('authentication.admin_home') }}" class="button is-dark is-small">
+            <span class="icon">
+                <i class="fas fa-arrow-left"></i>
+            </span>
+            <span>Back</span>
+        </a>
+        <div class="box" id="addTalabandi">
+            <h2 class="subtitle">Add Talabandi</h2>
+            <div class="column is-vcentered">
+                <form action="{{url_for('authentication.add_talabandi')}}" method="POST" id="talabandiForm">
+                    <div class="field">
+                        <label class="label">Talabandi Date</label>
+                        <div class="control">
+                            <input class="input" type="date" name="talabandi_date" value="{{res.date}}" disabled>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Description</label>
+                        <div class="control">
+                            <textarea class="textarea" name="description" value="{{res.description}}" placeholder="Enter Description"></textarea>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Status</label>
+                        <div class="control">
+                            <div class="select">
+                                <select name="status" id="statusSelect">
+                                    <option value="ONGOING">Ongoing</option>
+                                    <option value="COMPLETED">Completed</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">End Date</label>
+                        <div class="control">
+                            <input class="input" type="date" name="end_date" value="{{res['end_date']}}" id="endDateInput" required>
+                        </div>
+                    </div>
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <button class="button is-primary" type="submit">Add Talabandi</button>
+                        </div>
+                        <div class="control">
+                            <button class="button is-light" type="reset">Reset</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+            <script>
+                // Get status select and end date input elements
+                const statusSelect = document.getElementById('statusSelect');
+                const endDateInput = document.getElementById('endDateInput');
+                
+                endDateInput.disabled = true;
+                // Add event listener to status select
+                statusSelect.addEventListener('change', function() {
+                    // Check if status is ongoing
+                    if (this.value === 'ONGOING') {
+                        // If ongoing, disable end date input
+                        endDateInput.disabled = true;
+                        // Clear end date value
+                        endDateInput.value = '';
+                    } else {
+                        // If completed, enable end date input
+                        endDateInput.disabled = false;
+                    }
+                });
+
+            </script>
+    </div>
+</div>
+{%endblock%}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PULocks</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='bulma/css/bulma.min.css')}}">
+
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+    <script src="{{url_for('static',filename='js/sweetalert2@11.js')}}"></script>
+</head>
+<body>
+<div class="container">
+    <header>
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="{{url_for('home.index')}}">
+                    PULOCKS &nbsp;<span class="tag is-warning">Alpha</span>&nbsp;<span class="tag is-danger">INCOMPLETE</span>
+                </a>
+
+                <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbar-items-list">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
+
+            <div id="navbar-items-list" class="navbar-menu">
+                <div class="navbar-end">
+                    <a class="navbar-item" href="{{url_for('home.index')}}">
+                        Home
+                    </a>
+                    <a class="navbar-item" href="{{url_for('home.stats')}}">
+                        Stats
+                    </a>
+                    <a class="navbar-item" href="{{url_for('home.about')}}">
+                        About
+                    </a>
+                    {% if session['user'] %}
+                    <a class="navbar-item" href="{{url_for('authentication.admin_home')}}">
+                        Profile
+                    </a>
+                    <div class="navbar-item">
+                        <div class="buttons">
+                            <a class="button is-dark" href="{{url_for('authentication.logout')}}">
+                                Logout
+                            </a>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="navbar-item">
+                        <div class="buttons">
+                            <a class="button is-dark" href="{{url_for('authentication.login')}}">
+                                Login
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+    </header>
+    {%block content%}{%endblock%}
+    
+    <footer class="has-background-dark has-text-grey-lighter" style="width: 100%; max-width: 100%; position: fixed; bottom: 0; left: 0; z-index: 100;">
+        <div class="content has-text-centered footer_content">With ❤️ from BE Computer</div>
+    </footer>
+  </div>
+  
+  <!-- Add Bulma's JavaScript -->
+  <script defer src="{{url_for('static', filename='js/fontawesome.js')}}"></script>
+  <script>
+      // Add JavaScript to toggle the navbar menu
+      document.addEventListener('DOMContentLoaded', function () {
+  
+          // Get all "navbar-burger" elements
+          var $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+  
+          // Check if there are any navbar burgers
+          if ($navbarBurgers.length > 0) {
+  
+              // Add a click event on each of them
+              $navbarBurgers.forEach(function ($el) {
+                  $el.addEventListener('click', function () {
+  
+                      // Get the target from the "data-target" attribute
+                      var target = $el.dataset.target;
+                      var $target = document.getElementById(target);
+  
+                      // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                      $el.classList.toggle('is-active');
+                      $target.classList.toggle('is-active');
+  
+                  });
+              });
+          }
+  
+      });
+  </script>
+</body>
+</html>
