@@ -3,7 +3,24 @@
 	{% with messages = get_flashed_messages() %}
         {% if messages %}
 			{% for msg in messages %}
-			  <script type="text/javascript">alert("{{msg}}")</script>
+			  <script type="text/javascript">
+				Swal.fire({
+					title: "{{msg}}",
+					width: 600,
+					padding: "3em",
+					color: "#fff",
+					background: `
+						rgba(0,0,0,0.5) url("{{url_for('static',filename='img/vivek.jpg')}}") no-repeat center center / contain
+					`,
+					
+					backdrop: `
+					  rgba(0,0,123,0.4)
+					  url("{{url_for('static',filename='img/puneet.gif')}}")
+					  left top
+					  no-repeat
+					`
+				  });
+			  </script>
         	{% endfor %}
         {% endif %}
     {% endwith %}
